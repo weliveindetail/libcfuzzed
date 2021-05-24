@@ -1,13 +1,15 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(libcfuzzer)
+project(libcfud)
 
 add_library(cfud STATIC
   libcfud.c
 )
 
 add_library(cfud-preload SHARED
-  libcfu.c
+  libcfud-preload.c
+  src/fuzz_cwd.c
+  src/prefix_subst.c
 )
 
 target_compile_options(cfud-preload PRIVATE
