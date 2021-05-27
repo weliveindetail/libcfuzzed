@@ -23,7 +23,7 @@ static int (*o_xstat64)(int, const char *, struct stat64 *);
 static FILE *(*o_fopen)(const char*, const char*);
 static DIR *(*o_opendir)(const char *);
 
-void libcfud_fuzz_cwd_init() {
+void libcfuzzed_fuzz_cwd_init() {
   o_realpath = dlsym(RTLD_NEXT, "realpath");
   o_xstat = dlsym(RTLD_NEXT, "__xstat");
   o_xstat64 = dlsym(RTLD_NEXT, "__xstat64");
@@ -39,7 +39,7 @@ void libcfud_fuzz_cwd_init() {
   set_actual_cwd(actual_cwd);
 }
 
-size_t libcfud_fuzz_cwd_reset(const uint8_t *data, size_t size) {
+size_t libcfuzzed_fuzz_cwd_reset(const uint8_t *data, size_t size) {
   char cwd_subst[PATH_MAX];
   char *write_pos = cwd_subst;
   const char *write_end = cwd_subst + PATH_MAX - 1;
