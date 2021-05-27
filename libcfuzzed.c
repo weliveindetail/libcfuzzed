@@ -1,6 +1,9 @@
+#define _GNU_SOURCE
+
 #include "libcfuzzed.h"
 #include "libcfuzzed-preload.h"
 
+#include <dlfcn.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -21,12 +24,14 @@ int libfuzzer_callback(const uint8_t *data, size_t size) {
   if (setjmp(loop_repeat_landing_pad) == EXIT_SUCCESS)
     return unit_test_main();
 
-  // "Expected" assertion failures are handled in libcfuzzed_loop_repeat()
-  // and longjmp back here, where control is returned to libFuzzer.
-  fprintf(stderr, "Exiting after assertion failure from fuzzer input: ");
-  for (size_t i = 0; i < size; i++)
-    fprintf(stderr, "%02X ", data[i]);
-  fprintf(stderr, "\n");
+  // "Expected" assertion failures arrived in libcfuzzed_loop_repeat() and
+  // longjmp'ed back here, where control gets returned to libFuzzer.
+  if (getenv("LIBCFUZZED_DUMP_ESCAPES")) {
+    fprintf(stderr, "Exiting after assertion failure from fuzzer input: ");
+    for (size_t i = 0; i < size; i++)
+      fprintf(stderr, "%02X ", data[i]);
+    fprintf(stderr, "\n");
+  }
   return EXIT_FAILURE;
 }
 
