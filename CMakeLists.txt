@@ -9,7 +9,11 @@ add_library(cfuzzed STATIC
 add_library(cfuzzed-preload SHARED
   libcfuzzed-preload.c
   src/fuzz_cwd.c
-  src/prefix_subst.c
+)
+
+target_include_directories(cfuzzed-preload PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${CMAKE_SOURCE_DIR}
 )
 
 target_compile_options(cfuzzed-preload PRIVATE
