@@ -1,3 +1,10 @@
+#ifndef LIBCFUZZED_H
+#define LIBCFUZZED_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef int(*unit_test_main_t)();
 
 // Call this from the main function in your unit-test in order to start running
@@ -10,3 +17,9 @@ int libcfuzzed_loop(int argc, char *argv[], unit_test_main_t);
 // assume that it's not worth digging deeper. It will start the next interation
 // with a new libc behavior.
 void libcfuzzed_loop_repeat();
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // LIBCFUZZED_H
